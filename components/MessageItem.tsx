@@ -25,11 +25,11 @@ const MessageItem: React.FC<MessageItemProps> = ({ message, theme }) => {
   const retroAIColor = 'text-green-300';
   const retroMetaColor = 'text-green-600';
 
-  // Clean Colors (High Contrast Black & White)
-  const cleanSystemColor = 'text-gray-400';
-  const cleanUserColor = 'text-white font-bold';
-  const cleanAIColor = 'text-white';
-  const cleanMetaColor = 'text-gray-500';
+  // Clean Colors (High Contrast Black & White) -> Now Soft Grey
+  const cleanSystemColor = 'text-gray-500';
+  const cleanUserColor = 'text-gray-200 font-bold';
+  const cleanAIColor = 'text-gray-300';
+  const cleanMetaColor = 'text-gray-600';
 
   let textColorClass = '';
   if (isRetro) {
@@ -38,14 +38,13 @@ const MessageItem: React.FC<MessageItemProps> = ({ message, theme }) => {
     textColorClass = isSystem ? cleanSystemColor : isUser ? cleanUserColor : cleanAIColor;
   }
 
-  // Force uppercase for the segmented display font (clean theme) to look authentic
-  // isRetro uses standard terminal font, Clean uses DSEG14
-  const fontClass = isRetro ? 'font-terminal text-xl' : 'font-seven-segment text-2xl uppercase tracking-widest';
+  // Use font-terminal (VT323) for both themes now
+  const fontClass = 'font-terminal text-xl';
   const metaColor = isRetro ? retroMetaColor : cleanMetaColor;
   const textShadow = isRetro ? { textShadow: '0 0 5px rgba(50, 255, 50, 0.5)' } : {};
 
-  // For segmented display, we want strict uppercase as lowercase often looks broken or missing in these fonts
-  const displayText = (!isRetro) ? message.text.toUpperCase() : message.text;
+  // Display text as-is (removed uppercase transformation for clean mode)
+  const displayText = message.text;
 
   return (
     <div className={`mb-6 ${textColorClass}`}>

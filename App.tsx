@@ -298,11 +298,11 @@ const App: React.FC = () => {
   // --- MAIN APP RENDER ---
   const containerClass = isRetro 
     ? "bg-black text-green-500 font-terminal crt-flicker selection:bg-green-500 selection:text-black" 
-    : "bg-black text-white font-seven-segment selection:bg-white selection:text-black";
+    : "bg-black text-gray-300 font-terminal selection:bg-gray-600 selection:text-white";
   
   const inputClass = isRetro
     ? "bg-transparent border-none outline-none text-green-500 placeholder-green-800 flex-1 min-w-0"
-    : "bg-transparent border-none outline-none text-white placeholder-gray-600 flex-1 min-w-0 uppercase";
+    : "bg-transparent border-none outline-none text-gray-300 placeholder-gray-600 flex-1 min-w-0";
 
   return (
     <div className={`h-screen w-screen flex flex-col overflow-hidden relative ${containerClass}`}>
@@ -327,11 +327,11 @@ const App: React.FC = () => {
       <div className="p-4 sm:p-8 pt-2 z-20 sticky bottom-0 bg-transparent">
         <div className={`max-w-4xl mx-auto flex items-center ${isRetro ? 'border-t border-green-900' : 'border-t border-gray-800'} pt-4`}>
           <div className="flex items-center mr-4 shrink-0">
-            <span className={`animate-pulse ${isRetro ? 'text-green-500' : 'text-white'}`}>
+            <span className={`animate-pulse ${isRetro ? 'text-green-500' : 'text-gray-500'}`}>
               {isRetro ? '>' : '>>'}
             </span>
             {isProcessing && (
-              <span className={`ml-2 text-sm animate-pulse ${isRetro ? 'text-green-700' : 'text-gray-500'}`}>
+              <span className={`ml-2 text-sm animate-pulse ${isRetro ? 'text-green-700' : 'text-gray-600'}`}>
                 loading...
               </span>
             )}
