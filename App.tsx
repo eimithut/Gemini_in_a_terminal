@@ -9,7 +9,9 @@ import BootScreen from './components/BootScreen';
 
 const App: React.FC = () => {
   // --- APP STATE ---
-  const [isBooting, setIsBooting] = useState(true); // New boot state
+  // Always boot on load so the animation is visible (removed sessionStorage check)
+  const [isBooting, setIsBooting] = useState(true);
+
   const [theme, setTheme] = useState<Theme>('retro');
   const [messages, setMessages] = useState<Message[]>([
     {
