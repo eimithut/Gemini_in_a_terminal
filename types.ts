@@ -1,3 +1,4 @@
+
 export enum Sender {
   USER = 'USER',
   AI = 'AI',
@@ -18,3 +19,5 @@ export interface ChatState {
 }
 
 export type Theme = 'retro' | 'clean';
+
+export type ChatMode = 'terminal' | 'assistant';

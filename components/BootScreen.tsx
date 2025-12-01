@@ -1,5 +1,7 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import Scanlines from './Scanlines';
+import { playBootSound } from '../utils/audio';
 
 interface BootScreenProps {
   onComplete: () => void;
@@ -29,9 +31,15 @@ const BootScreen: React.FC<BootScreenProps> = ({ onComplete }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // Attempt to play boot sound immediately (might be blocked by browser until interaction)
+    // but often works if the user reloads the page.
+    try {
+        playBootSound();
+    } catch(e) {
+        // Ignore audio context errors
+    }
+
     let timeoutId: number;
-    // We use a local variable to track progress inside the closure ensuring
-    // we don't need 'progress' as a dependency, preventing re-renders from restarting logic.
     let currentProgress = 0;
 
     const runBootSequence = () => {

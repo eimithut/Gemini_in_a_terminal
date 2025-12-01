@@ -1,12 +1,17 @@
+
 import React, { useState, useEffect } from 'react';
-import { Theme } from '../types';
+import { Theme, ChatMode } from '../types';
 
 interface HeaderProps {
   theme: Theme;
+  mode: ChatMode;
+  isMuted: boolean;
   onToggleTheme: () => void;
+  onToggleMode: () => void;
+  onToggleMute: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ theme, onToggleTheme }) => {
+const Header: React.FC<HeaderProps> = ({ theme, mode, isMuted, onToggleTheme, onToggleMode, onToggleMute }) => {
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
@@ -18,6 +23,15 @@ const Header: React.FC<HeaderProps> = ({ theme, onToggleTheme }) => {
   const formattedTime = time.toLocaleTimeString('en-US', { hour12: false });
 
   const isRetro = theme === 'retro';
+  const isTerminal = mode === 'terminal';
+
+  // Dynamic Titles based on Mode
+  const desktopTitlePart1 = isTerminal ? 'ENDEAVOUR' : 'GEMINI';
+  const desktopTitlePart2 = isTerminal ? 'OS' : 'LINK';
+  const mobileTitle = isTerminal ? 'EOS_TERM' : 'AI_LINK';
+
+  // Fancy Display Names for Buttons
+  const modeDisplayName = isTerminal ? 'ENDEAVOUR_OS' : 'GEMINI_LINK';
 
   return (
     <div className={`border-b-2 p-4 flex justify-between items-center select-none sticky top-0 z-40 transition-all duration-300
@@ -29,14 +43,46 @@ const Header: React.FC<HeaderProps> = ({ theme, onToggleTheme }) => {
         ) : (
           <div className="h-3 w-3 bg-gray-500 animate-pulse"></div>
         )}
-        <h1 className={`font-digital text-2xl tracking-widest uppercase transition-colors duration-300
+        
+        {/* DESKTOP TITLE */}
+        <h1 className={`font-digital text-2xl tracking-widest uppercase transition-colors duration-300 hidden sm:block
           ${isRetro ? 'text-green-500 [text-shadow:0_0_10px_rgba(0,255,0,0.7)]' : 'text-gray-400'}`}>
-          GEMINI<span className={`mx-1 ${isRetro ? 'text-green-800' : 'text-gray-600'}`}>-</span>TERMINAL<span className="text-xs align-top ml-1 opacity-70">v2.5</span>
+          {desktopTitlePart1}<span className={`mx-1 ${isRetro ? 'text-green-800' : 'text-gray-600'}`}>_</span>{desktopTitlePart2}
+        </h1>
+        
+        {/* MOBILE TITLE */}
+        <h1 className={`sm:hidden font-digital text-xl ${isRetro ? 'text-green-500' : 'text-gray-400'}`}>
+          {mobileTitle}
         </h1>
       </div>
       
-      <div className="flex items-center gap-6">
-        {/* Settings / Theme Toggle */}
+      <div className="flex items-center gap-4 sm:gap-6">
+        
+        {/* AUDIO TOGGLE */}
+        <button 
+          onClick={onToggleMute}
+          className={`hidden sm:block text-xs uppercase tracking-widest border px-2 py-1 transition-all font-terminal
+            ${isRetro 
+              ? 'border-green-800 text-green-700 hover:text-green-400 hover:border-green-400' 
+              : 'border-gray-600 text-gray-400 hover:bg-gray-900'
+            }`}
+        >
+          [AUDIO: {isMuted ? 'OFF' : 'ON'}]
+        </button>
+
+        {/* MODE TOGGLE */}
+        <button 
+          onClick={onToggleMode}
+          className={`text-xs uppercase tracking-widest border px-2 py-1 transition-all font-terminal
+            ${isRetro 
+              ? 'border-green-800 text-green-700 hover:text-green-400 hover:border-green-400' 
+              : 'border-gray-600 text-gray-400 hover:bg-gray-900'
+            }`}
+        >
+          [SYSTEM: {modeDisplayName}]
+        </button>
+
+        {/* THEME TOGGLE */}
         <button 
           onClick={onToggleTheme}
           className={`hidden sm:block text-xs uppercase tracking-widest border px-2 py-1 transition-all font-terminal
@@ -49,7 +95,7 @@ const Header: React.FC<HeaderProps> = ({ theme, onToggleTheme }) => {
         </button>
 
         <div className="flex flex-col items-end">
-          <div className={`tracking-widest leading-none transition-colors duration-300 font-digital text-3xl
+          <div className={`tracking-widest leading-none transition-colors duration-300 font-digital text-2xl sm:text-3xl
             ${isRetro ? 'text-red-500 [text-shadow:0_0_10px_rgba(255,0,0,0.7)]' : 'text-gray-300'}`}>
             {formattedTime}
           </div>
