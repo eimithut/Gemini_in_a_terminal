@@ -1,5 +1,5 @@
 {
-  "name": "Retro Terminal AI",
+  "name": "Gemini in a terminal",
   "description": "A retro-styled 7-segment/terminal chat interface powered by Gemini.",
   "requestFramePermissions": []
 }

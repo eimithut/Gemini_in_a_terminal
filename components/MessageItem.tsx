@@ -41,8 +41,9 @@ const MessageItem: React.FC<MessageItemProps> = ({ message, theme }) => {
     textColorClass = isSystem ? cleanSystemColor : isUser ? cleanUserColor : cleanAIColor;
   }
 
-  // Use font-terminal (VT323) for both themes now
-  const fontClass = 'font-terminal text-xl';
+  // Use font-terminal (VT323) for both themes now. 
+  // Adjusted: text-base for mobile, text-xl for desktop (sm and up)
+  const fontClass = 'font-terminal text-base sm:text-xl';
   const metaColor = isRetro ? retroMetaColor : cleanMetaColor;
   const textShadow = isRetro ? { textShadow: '0 0 5px rgba(50, 255, 50, 0.5)' } : {};
   const codeBgClass = isRetro ? retroCodeBg : cleanCodeBg;
@@ -72,8 +73,8 @@ const MessageItem: React.FC<MessageItemProps> = ({ message, theme }) => {
     return parts.map((part, index) => {
       if (part.type === 'code') {
         return (
-          <div key={index} className={`my-2 p-3 rounded text-sm font-mono overflow-x-auto ${codeBgClass}`}>
-             <div className="opacity-50 text-xs uppercase mb-1 border-b border-gray-600 pb-1 w-full">{part.language}</div>
+          <div key={index} className={`my-2 p-2 sm:p-3 rounded text-xs sm:text-sm font-mono overflow-x-auto ${codeBgClass}`}>
+             <div className="opacity-50 text-[10px] sm:text-xs uppercase mb-1 border-b border-gray-600 pb-1 w-full">{part.language}</div>
              <pre className="m-0 whitespace-pre">{part.content}</pre>
           </div>
         );
@@ -97,15 +98,15 @@ const MessageItem: React.FC<MessageItemProps> = ({ message, theme }) => {
     // Bold (**text**)
     formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     // Inline Code (`text`)
-    formatted = formatted.replace(/`(.*?)`/g, '<code class="bg-gray-700 bg-opacity-50 px-1 rounded mx-1 text-sm">$1</code>');
+    formatted = formatted.replace(/`(.*?)`/g, '<code class="bg-gray-700 bg-opacity-50 px-1 rounded mx-1 text-xs sm:text-sm">$1</code>');
     
     return formatted;
   };
 
   return (
-    <div className={`mb-6 ${textColorClass}`}>
+    <div className={`mb-4 sm:mb-6 ${textColorClass}`}>
       <div className={`flex flex-col sm:flex-row ${fontClass}`}>
-        <span className={`flex-shrink-0 mr-4 opacity-70 select-none ${metaColor} text-lg pt-1`}>
+        <span className={`flex-shrink-0 mr-2 sm:mr-4 opacity-70 select-none ${metaColor} text-sm sm:text-lg pt-1`}>
           [{timeString}] {isUser ? '>> OP' : isSystem ? '>> SYS' : '>> CPU'}
         </span>
         <div 

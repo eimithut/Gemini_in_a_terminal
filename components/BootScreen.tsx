@@ -8,6 +8,7 @@ interface BootScreenProps {
 }
 
 const BOOT_LOGS = [
+  ">>> DEVELOPED BY EIMITHUT <<<",
   "BIOS DATE 01/01/85 14:22:56 VER 1.02",
   "CPU: GEMINI QUANTUM CORE @ 8MHz",
   "DETECTING PRIMARY MASTER ... 20MB HDD",
@@ -57,8 +58,13 @@ const BootScreen: React.FC<BootScreenProps> = ({ onComplete }) => {
 
       // LOGIC: Randomly decide behavior for this step
       
+      // 0. CREDIT SPLASH (Start): Show Eimithut credit and wait 1.5s
+      if (currentProgress === 0) {
+        increment = 1; // Slight move to show the bar started
+        delay = 1500; // Wait exactly 1.5 seconds
+      }
       // 1. STALL (5% chance): Simulate hanging on a heavy process (Rare)
-      if (r < 0.05 && currentProgress < 90) {
+      else if (r < 0.05 && currentProgress < 90) {
         increment = 0; // Stop completely
         delay = Math.random() * 800 + 400; // Hang for 0.4s to 1.2s
       } 
@@ -108,9 +114,9 @@ const BootScreen: React.FC<BootScreenProps> = ({ onComplete }) => {
     <div className="fixed inset-0 bg-black text-green-500 font-terminal overflow-hidden flex flex-col items-center justify-center z-50 selection:bg-green-500 selection:text-black">
       <Scanlines />
       
-      <div className="w-full max-w-3xl p-8 z-10 flex flex-col gap-8">
+      <div className="w-full max-w-3xl p-4 sm:p-8 z-10 flex flex-col gap-4 sm:gap-8 h-full sm:h-auto justify-center">
         {/* Header Info */}
-        <div className="flex justify-between border-b-2 border-green-800 pb-2 mb-4 uppercase tracking-widest text-xl">
+        <div className="flex justify-between border-b-2 border-green-800 pb-2 mb-4 uppercase tracking-widest text-sm sm:text-xl">
             <span>RetroBIOS v2.5</span>
             <span>Mem: 640K</span>
         </div>
@@ -118,11 +124,11 @@ const BootScreen: React.FC<BootScreenProps> = ({ onComplete }) => {
         {/* Logs Area */}
         <div 
           ref={containerRef}
-          className="h-72 overflow-y-auto font-mono text-xl flex flex-col gap-1 scrollbar-hide border border-green-900 bg-black bg-opacity-50 p-4 shadow-[0_0_15px_rgba(0,255,0,0.1)]"
+          className="h-60 sm:h-72 overflow-y-auto font-mono text-sm sm:text-xl flex flex-col gap-1 scrollbar-hide border border-green-900 bg-black bg-opacity-50 p-4 shadow-[0_0_15px_rgba(0,255,0,0.1)]"
         >
           {logs.map((log, index) => (
             <div key={index} className="whitespace-nowrap">
-              <span className="opacity-50 mr-4">[{new Date(Date.now() - (logs.length - index) * 1000).toLocaleTimeString('en-US', {hour12:false})}]</span>
+              <span className="opacity-50 mr-2 sm:mr-4">[{new Date(Date.now() - (logs.length - index) * 1000).toLocaleTimeString('en-US', {hour12:false})}]</span>
               {log}
             </div>
           ))}
@@ -132,7 +138,7 @@ const BootScreen: React.FC<BootScreenProps> = ({ onComplete }) => {
         {/* Progress Bar */}
         <div className="w-full border-2 border-green-800 p-1 mt-auto shadow-[0_0_10px_rgba(0,255,0,0.2)]">
           <div 
-            className="h-8 bg-green-600 relative overflow-hidden transition-all duration-200 ease-out"
+            className="h-4 sm:h-8 bg-green-600 relative overflow-hidden transition-all duration-200 ease-out"
             style={{ width: `${progress}%` }}
           >
              {/* Striped pattern for the progress bar */}
@@ -145,9 +151,9 @@ const BootScreen: React.FC<BootScreenProps> = ({ onComplete }) => {
           </div>
         </div>
         
-        <div className="flex justify-between text-lg uppercase tracking-widest mt-2">
+        <div className="flex justify-between text-sm sm:text-lg uppercase tracking-widest mt-2">
             <span className="animate-pulse">
-              {progress < 100 ? "BOOTING SYSTEM..." : "SYSTEM READY"}
+              {progress < 100 ? "BOOTING..." : "SYSTEM READY"}
             </span>
             <span>{Math.floor(progress)}%</span>
         </div>

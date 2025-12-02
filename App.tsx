@@ -475,7 +475,8 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className={`h-screen w-screen flex flex-col overflow-hidden relative ${containerClass}`}>
+    // Use 100dvh (dynamic viewport height) for better mobile browser support
+    <div className={`h-[100dvh] w-screen flex flex-col overflow-hidden relative ${containerClass}`}>
       {isRetro && <Scanlines />}
       
       <Header 
@@ -488,7 +489,7 @@ const App: React.FC = () => {
       />
       
       <main 
-        className="flex-1 overflow-y-auto p-4 sm:p-8 pb-0 z-10 scrollbar-hide" 
+        className="flex-1 overflow-y-auto p-2 sm:p-4 md:p-8 pb-0 z-10 scrollbar-hide" 
         onClick={() => inputRef.current?.focus()}
         ref={scrollContainerRef}
         onScroll={handleScroll}
@@ -501,25 +502,28 @@ const App: React.FC = () => {
         </div>
       </main>
 
-      <div className="p-4 sm:p-8 pt-2 z-20 sticky bottom-0 bg-transparent">
+      {/* Input Area */}
+      {/* Added safe-area padding for mobile home indicators */}
+      <div className={`p-2 sm:p-4 md:p-8 pt-2 z-20 sticky bottom-0 pb-[max(0.5rem,env(safe-area-inset-bottom))] ${isRetro ? 'bg-black/90' : 'bg-black/90'}`}>
         <div className={`max-w-4xl mx-auto flex items-center ${isRetro ? 'border-t border-green-900' : 'border-t border-gray-800'} pt-4`}>
-          <div className="flex items-center mr-4 shrink-0">
-            <span className={`animate-pulse whitespace-nowrap ${isRetro ? 'text-green-500' : 'text-gray-500'}`}>
+          <div className="flex items-center mr-2 sm:mr-4 shrink-0 max-w-[40%] sm:max-w-none overflow-hidden">
+            <span className={`animate-pulse whitespace-nowrap truncate ${isRetro ? 'text-green-500' : 'text-gray-500'}`}>
               {promptText}
             </span>
             {isProcessing && (
-              <span className={`ml-2 text-sm animate-pulse ${isRetro ? 'text-green-700' : 'text-gray-600'}`}>
+              <span className={`ml-2 text-xs sm:text-sm animate-pulse hidden sm:inline ${isRetro ? 'text-green-700' : 'text-gray-600'}`}>
                 {chatMode === 'terminal' ? 'executing...' : 'thinking...'}
               </span>
             )}
           </div>
+          {/* text-base on mobile prevents iOS zoom. sm:text-2xl on desktop for look. */}
           <input
             ref={inputRef}
             type="text"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={handleKeyDown}
-            className={`text-xl sm:text-2xl ${inputClass}`}
+            className={`text-base sm:text-2xl ${inputClass}`}
             placeholder={chatMode === 'terminal' ? "enter command..." : "send message..."}
             autoFocus
             disabled={false}
